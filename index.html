@@ -150,6 +150,33 @@
             border: 2px dashed #4caf50;
             padding: 20px;
         }
+
+        #welcome-banner {
+            padding: 20px;
+        }
+
+        #welcome-banner img{
+            width: 100%;
+        }
+
+        #welcome-banner h1 {
+            color: #b8b8b8;
+            text-align: center; 
+        }
+
+        #intro-banner img {
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            background: #e7e7e7;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 11px;
+            color: #acacac;
+            margin-top: 10px;
+        }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
@@ -162,7 +189,17 @@
             <button class="menu-items" id="signout_button" style="display: none;">Sign Out</button>
         </div>
 
-        <div class="inner-wrapper">
+        <div id="welcome-banner" style="display:none;">
+            <h1>Welcome to Drive App !</h1>
+            <img src="drive-intro.png">
+            <button id="get-started" class="button primary" style="margin: 30px 0 0 0;">Get started !</button>
+        </div>
+
+        <div id="intro-banner" style="display: none;">
+            <img src="banner.jpg">
+        </div>
+
+        <div id="innerWrapper" class="inner-wrapper" style="display:none;">
             <form id="uploadForm">
                 <div class="form-input upload-box">
                     <input class = "file-upload" id="fileInput" type="file" name="fileToUpload" />
@@ -183,7 +220,9 @@
                 </table>
                 <pre id="content" style="white-space: pre-wrap;"></pre>
             </div>
+
         </div>
+        <footer>SSD Assignment 2 (IT17156516/IT17078856)</footer>
     </div>
 
     <script type="text/javascript">
@@ -199,6 +238,9 @@
         var SCOPES = 'https://www.googleapis.com/auth/drive';
 
         var authorizeButton = document.getElementById('authorize_button');
+
+        var getStartedButton = document.getElementById('get-started');
+
         var signoutButton = document.getElementById('signout_button');
 
         var uploadBtn = document.getElementById('fileInput')
@@ -235,6 +277,7 @@
                 // Handle the initial sign-in state.
                 updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
                 authorizeButton.onclick = handleAuthClick;
+                getStartedButton.onclick = handleAuthClick;
                 signoutButton.onclick = handleSignoutClick;
             }, function (error) {
                 appendPre(JSON.stringify(error, null, 2));
@@ -248,15 +291,25 @@
         function updateSigninStatus(isSignedIn) {
             if (isSignedIn) {
                 authorizeButton.style.display = 'none';
+                getStartedButton.style.display = 'none';
                 signoutButton.style.display = 'block';
                 uploadForm.style.display = 'block';
                 document.getElementById('box').style.display = 'block';
+                document.getElementById('innerWrapper').style.display = 'block';
+                document.getElementById('intro-banner').style.display = 'block';
+                document.getElementById('welcome-banner').style.display = 'none';
+                
                 listFiles();
             } else {
                 authorizeButton.style.display = 'block';
+                getStartedButton.style.display = 'block';
                 signoutButton.style.display = 'none';
                 uploadForm.style.display = 'none';
                 document.getElementById('box').style.display = 'none'
+                document.getElementById('innerWrapper').style.display = 'none';
+                document.getElementById('intro-banner').style.display = 'none';
+                document.getElementById('welcome-banner').style.display = 'block';
+
                 clear()
             }
         }
