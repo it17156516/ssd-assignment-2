@@ -81,9 +81,7 @@
 
         uploadForm.onsubmit = uploadFile
 
-        /**
-         *  On load, called to load the auth2 library and API client library.
-         */
+        // load the auth2 and API client libraries
         function handleClientLoad() {
             gapi.load('client:auth2', initClient);
         }
@@ -143,27 +141,24 @@
             }
         }
 
-        /**
-         *  Sign in the user upon button click.
-         */
+        // when the button clicked sign in the user
         function handleAuthClick(event) {
             gapi.auth2.getAuthInstance().signIn();
         }
 
+        // show spinner when loading
         function showSpinner() {
-
             var spinner = document.getElementById('spinner')
             spinner.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="spinner" class="svg-inline--fa fa-spinner fa-w-16 fa-spin" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"></path></svg>'
             spinner.style.display = 'block'
         }
 
+        // hide the spinner after loading
         function hideSpinner() {
             spinner.style.display = 'none'
         }
 
-        /**
-         *  Sign out the user upon button click.
-         */
+        // when the button clicked sign out the user
         function handleSignoutClick(event) {
             gapi.auth2.getAuthInstance().signOut();
         }
@@ -239,9 +234,7 @@
             document.getElementById('fileList').innerHTML = ""
         }
 
-        /**
-         * Print files.
-         */
+        // display the files
         function listFiles() {
             clear()
             showSpinner()
@@ -249,14 +242,13 @@
                 'pageSize': 10,
                 'fields': "nextPageToken, files(id, name)"
             }).then(function (response) {
-                // appendPre('Files:');
+                
                 hideSpinner()
                 var files = response.result.files;
                 if (files && files.length > 0) {
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
                         appendPre(file.name, file.id)
-                        //appendPre(file.name + ' (' + file.id + ')');
                     }
                     
                 } else {
@@ -268,6 +260,7 @@
             })
         }
 
+        // upload files to the drive
         function uploadToDrive(file) {
             gapi.client.drive.files.create({
 
@@ -300,17 +293,24 @@
                     fields: 'id, name, kind, size'
                 }).then(apiResponse => {
                     btn.setAttribute('class', 'button primary')
+                    
+                    // reset the upload form
                     uploadForm.reset();
+
+                    // display the uploaded files
                     listFiles()
                 })
                 .catch(() => {
                     btn.setAttribute('class', 'button primary')
                     alert('Unkown error occured! Please try again later.')
+
+                    // reset the upload form
                     uploadForm.reset();
                 })
 
 
             } else {
+                // give an alert
                 alert('Please choose a file')
             }
 
